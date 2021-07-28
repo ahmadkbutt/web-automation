@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "inlineSourceMap": true,
+    "declaration": false,
+    "noImplicitAny": false,
+    "outDir": "tmp",
+    "types": ["mocha", "node", "chai"],
+    "typeRoots": ["../node_modules/@types"]
+  },
+  "exclude": ["node_modules"]
+}

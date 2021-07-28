@@ -1,0 +1,35 @@
+{
+  "name": "web-automation-mc",
+  "version": "1.0.0",
+  "description": "",
+  "main": "tmp/conf.js",
+  "scripts": {
+    "debug": "node --inspect ./node_modules/.bin/protractor tmp/conf.js",
+    "tsc": "tsc",
+    "pretest": "tsc",
+    "test": "protractor tmp/conf.js",
+    "test-qa": "npm run test",
+    "pretest-prod": "tsc",
+    "test-prod": "protractor tmp/conf.js",
+    "pretest-qa-cross": "tsc",
+    "test-qa-cross": "protractor tmp/conf.crossBrowsers.js",
+    "pretest-prod-cross": "tsc",
+    "test-prod-cross": "protractor tmp/conf.crossBrowsers.js",
+    "update:webdriver": "webdriver-manager update"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/node": "^16.4.5",
+    "chai": "^4.3.4",
+    "chai-as-promised": "^7.1.1",
+    "mocha": "^9.0.3",
+    "protractor": "^7.0.0"
+  },
+  "devDependencies": {
+    "@types/chai": "^4.2.21",
+    "@types/mocha": "^9.0.0",
+    "ts-node": "^10.1.0",
+    "typescript": "^4.3.5"
+  }
+}
