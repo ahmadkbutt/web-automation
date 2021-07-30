@@ -15,7 +15,8 @@
     "test-qa-cross": "protractor tmp/conf.crossBrowsers.js",
     "pretest-prod-cross": "tsc",
     "test-prod-cross": "protractor tmp/conf.crossBrowsers.js",
-    "update:webdriver": "webdriver-manager update"
+    "update:webdriver": "webdriver-manager update --versions.chrome=92.0.4515.107",
+    "start:webdriver": "webdriver-manager start --versions.chrome=92.0.4515.107"
   },
   "author": "",
   "license": "ISC",
@@ -29,6 +30,7 @@
   "devDependencies": {
     "@types/chai": "^4.2.21",
     "@types/mocha": "^9.0.0",
+    "protractor-react-selector": "^2.2.4",
     "ts-node": "^10.1.0",
     "typescript": "^4.3.5"
   }

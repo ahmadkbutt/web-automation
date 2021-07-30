@@ -23,8 +23,9 @@ export let config: Config = {
   },
   onPrepare: function () {
     // making chai available globally. in your test use `const expect = global['chai'].expect;`
-    var chai = require("chai");
-    var chaiAsPromised = require("chai-as-promised");
+    browser.waitForAngularEnabled(false);
+    const chai = require("chai");
+    const chaiAsPromised = require("chai-as-promised");
     chai.use(chaiAsPromised);
     globalAny.chai = chai;
   },
@@ -37,7 +38,7 @@ export let config: Config = {
   // collisions on the global namespace.
   noGlobals: true,
   params: {
-    baseUrl: "http://localhost:4200",
+    baseUrl: "https://kayak.com/",
   },
   // specs: [ 'specs/**/*spec.js' ],
   //   specs: [ 'specs/**/login.spec.js' ],

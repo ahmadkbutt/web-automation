@@ -1,32 +1,25 @@
 import {browser, element, ExpectedConditions, by} from 'protractor';
 import {expect} from 'chai';
+import {HomePageObject} from "../pages/home.page";
+import {FlightsPageObject} from "../pages/flights.page";
 
 // spec.js
-describe('Protractor Demo App', function () {
-    var firstNumber = element(by.model('first'));
-    var secondNumber = element(by.model('second'));
-    var goButton = element(by.id('gobutton'));
-    var latestResult = element(by.binding('latest'));
-    var history = element.all(by.repeater('result in memory'));
-
-    function add(a: any, b: any) {
-        firstNumber.sendKeys(a);
-        secondNumber.sendKeys(b);
-        goButton.click();
-    }
-
-    beforeEach(function () {
-        browser.get('http://juliemr.github.io/protractor-demo/');
+describe('kayak flight booking', () => {
+    const homepage:HomePageObject = new HomePageObject();
+    before(() => {
+        browser.get(homepage.getUrl());
     });
-
-    it('should have a history', function () {
-        add(1, 2);
-        add(3, 4);
-
-        expect(history.count()).to.equal(2);
-
-        add(5, 6);
-
-        expect(history.count()).to.equal(3); // This is wrong!
+    it('should navigate to flights page', async () => {
+        homepage.getFlightsLink().click();
+        expect(await browser.getCurrentUrl()).to.contains('flights');
     });
+    const flightsPage:FlightsPageObject = new FlightsPageObject();
+    it('should display origin field',  async () => {
+        const isOriginPresent = await flightsPage.getOrigin().isPresent();
+        expect(isOriginPresent).to.equal(true);
+    })
+    it('should display destination field',  async () => {
+        const isDestinationPresent = await flightsPage.getDestination().isPresent();
+        expect(isDestinationPresent).to.equal(true);
+    })
 });
