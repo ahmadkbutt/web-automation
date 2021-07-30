@@ -1,18 +1,42 @@
-import {$, $$, by, element, ElementArrayFinder, ElementFinder} from "protractor";
-import {config} from "../conf";
+import {$,ElementArrayFinder, ElementFinder} from "protractor";
 
 export class FlightsPageObject {
-    public origin: ElementFinder;
-    public destination:ElementFinder;
+    public originField: ElementFinder;
+    public destinationField:ElementFinder;
+    private readonly departureAndReturnFields:ElementArrayFinder;
+    public departureField:ElementFinder;
+    public returnField:ElementFinder;
+    public tripTypeField:ElementFinder;
 
     constructor() {
-        this.origin = $("div[aria-label='Flight origin input']");
-        this.destination = $("div[aria-label='Flight destination input']");
+        this.originField = $("div[aria-label='Flight origin input']");
+        this.destinationField = $("div[aria-label='Flight destination input']");
+        this.departureAndReturnFields = $("div[aria-label='Departure and return dates input']").$$('.cQtq-input');
+        this.tripTypeField = $('div.zcIg').$$('div.wIIH-handle').get(0).$$('span').get(0);
+        if(this.departureAndReturnFields){
+            this.setDepartureField();
+            this.setReturnField();
+        }
     }
-    getOrigin(){
-        return this.origin;
+    setDepartureField(){
+        this.departureField = this.departureAndReturnFields.get(0);
     }
-    getDestination(){
-        return this.destination;
+    setReturnField(){
+        this.returnField = this.departureAndReturnFields.get(1)
+    }
+    getOriginField(){
+        return this.originField;
+    }
+    getDestinationField(){
+        return this.destinationField;
+    }
+    getDepartureField(){
+        return this.departureField;
+    }
+    getReturnField(){
+        return this.returnField;
+    }
+    getTripTypeField(){
+        return this.tripTypeField;
     }
 }

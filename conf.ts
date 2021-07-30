@@ -21,9 +21,9 @@ export let config: Config = {
       project: "tsconfig.json",
     });
   },
-  onPrepare: function () {
+  onPrepare: async function () {
     // making chai available globally. in your test use `const expect = global['chai'].expect;`
-    browser.waitForAngularEnabled(false);
+    await browser.waitForAngularEnabled(false)
     const chai = require("chai");
     const chaiAsPromised = require("chai-as-promised");
     chai.use(chaiAsPromised);
