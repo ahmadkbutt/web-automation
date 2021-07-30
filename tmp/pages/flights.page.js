@@ -6,8 +6,10 @@ var FlightsPageObject = /** @class */ (function () {
     function FlightsPageObject() {
         this.originField = protractor_1.$("div[aria-label='Flight origin input']");
         this.destinationField = protractor_1.$("div[aria-label='Flight destination input']");
-        this.departureAndReturnFields = protractor_1.$("div[aria-label='Departure and return dates input']").$$('.cQtq-input');
-        this.tripTypeField = protractor_1.$('div.zcIg').$$('div.wIIH-handle').get(0).$$('span').get(0);
+        this.departureAndReturnFields = protractor_1.$$("div[aria-label='Departure and return dates input']").get(0).$$('.cQtq-input');
+        this.tripDropdownForm = protractor_1.$('div.zcIg');
+        this.tripDropDownButton = this.tripDropdownForm.$$("div[role='button']").get(0);
+        this.selectedTripType = this.tripDropDownButton.$$('div.wIIH-handle').get(0).$$('span').get(0);
         if (this.departureAndReturnFields) {
             this.setDepartureField();
             this.setReturnField();
@@ -19,22 +21,32 @@ var FlightsPageObject = /** @class */ (function () {
     FlightsPageObject.prototype.setReturnField = function () {
         this.returnField = this.departureAndReturnFields.get(1);
     };
-    FlightsPageObject.prototype.getOriginField = function () {
-        return this.originField;
+    FlightsPageObject.prototype.getTripDropDownButton = function () {
+        return this.tripDropDownButton;
     };
-    FlightsPageObject.prototype.getDestinationField = function () {
-        return this.destinationField;
+    FlightsPageObject.prototype.getSelectedTripType = function () {
+        return this.selectedTripType;
     };
-    FlightsPageObject.prototype.getDepartureField = function () {
-        return this.departureField;
+    FlightsPageObject.prototype.setTripTypeList = function () {
+        this.tripTypeList = protractor_1.$('div.xvRy-content').$$("li[role='tab']");
     };
-    FlightsPageObject.prototype.getReturnField = function () {
-        return this.returnField;
+    FlightsPageObject.prototype.getTripTypeItem = function (item) {
+        this.setTripTypeList();
+        return this.tripTypeList.get(item);
     };
-    FlightsPageObject.prototype.getTripTypeField = function () {
-        return this.tripTypeField;
+    FlightsPageObject.prototype.isOriginFieldPresent = function () {
+        return this.originField.isPresent();
+    };
+    FlightsPageObject.prototype.isDestinationFieldPresent = function () {
+        return this.destinationField.isPresent();
+    };
+    FlightsPageObject.prototype.isDepartureFieldPresent = function () {
+        return this.departureField.isPresent();
+    };
+    FlightsPageObject.prototype.isReturnFieldPresent = function () {
+        return this.returnField.isPresent();
     };
     return FlightsPageObject;
 }());
 exports.FlightsPageObject = FlightsPageObject;
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiZmxpZ2h0cy5wYWdlLmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiLi4vLi4vcGFnZXMvZmxpZ2h0cy5wYWdlLnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7OztBQUFBLHlDQUErRDtBQUUvRDtJQVFJO1FBQ0ksSUFBSSxDQUFDLFdBQVcsR0FBRyxjQUFDLENBQUMsdUNBQXVDLENBQUMsQ0FBQztRQUM5RCxJQUFJLENBQUMsZ0JBQWdCLEdBQUcsY0FBQyxDQUFDLDRDQUE0QyxDQUFDLENBQUM7UUFDeEUsSUFBSSxDQUFDLHdCQUF3QixHQUFHLGNBQUMsQ0FBQyxvREFBb0QsQ0FBQyxDQUFDLEVBQUUsQ0FBQyxhQUFhLENBQUMsQ0FBQztRQUMxRyxJQUFJLENBQUMsYUFBYSxHQUFHLGNBQUMsQ0FBQyxVQUFVLENBQUMsQ0FBQyxFQUFFLENBQUMsaUJBQWlCLENBQUMsQ0FBQyxHQUFHLENBQUMsQ0FBQyxDQUFDLENBQUMsRUFBRSxDQUFDLE1BQU0sQ0FBQyxDQUFDLEdBQUcsQ0FBQyxDQUFDLENBQUMsQ0FBQztRQUNsRixJQUFHLElBQUksQ0FBQyx3QkFBd0IsRUFBQztZQUM3QixJQUFJLENBQUMsaUJBQWlCLEVBQUUsQ0FBQztZQUN6QixJQUFJLENBQUMsY0FBYyxFQUFFLENBQUM7U0FDekI7SUFDTCxDQUFDO0lBQ0QsNkNBQWlCLEdBQWpCO1FBQ0ksSUFBSSxDQUFDLGNBQWMsR0FBRyxJQUFJLENBQUMsd0JBQXdCLENBQUMsR0FBRyxDQUFDLENBQUMsQ0FBQyxDQUFDO0lBQy9ELENBQUM7SUFDRCwwQ0FBYyxHQUFkO1FBQ0ksSUFBSSxDQUFDLFdBQVcsR0FBRyxJQUFJLENBQUMsd0JBQXdCLENBQUMsR0FBRyxDQUFDLENBQUMsQ0FBQyxDQUFBO0lBQzNELENBQUM7SUFDRCwwQ0FBYyxHQUFkO1FBQ0ksT0FBTyxJQUFJLENBQUMsV0FBVyxDQUFDO0lBQzVCLENBQUM7SUFDRCwrQ0FBbUIsR0FBbkI7UUFDSSxPQUFPLElBQUksQ0FBQyxnQkFBZ0IsQ0FBQztJQUNqQyxDQUFDO0lBQ0QsNkNBQWlCLEdBQWpCO1FBQ0ksT0FBTyxJQUFJLENBQUMsY0FBYyxDQUFDO0lBQy9CLENBQUM7SUFDRCwwQ0FBYyxHQUFkO1FBQ0ksT0FBTyxJQUFJLENBQUMsV0FBVyxDQUFDO0lBQzVCLENBQUM7SUFDRCw0Q0FBZ0IsR0FBaEI7UUFDSSxPQUFPLElBQUksQ0FBQyxhQUFhLENBQUM7SUFDOUIsQ0FBQztJQUNMLHdCQUFDO0FBQUQsQ0FBQyxBQXZDRCxJQXVDQztBQXZDWSw4Q0FBaUIifQ==
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiZmxpZ2h0cy5wYWdlLmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiLi4vLi4vcGFnZXMvZmxpZ2h0cy5wYWdlLnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7OztBQUFBLHlDQUFvRTtBQUVwRTtJQVdJO1FBQ0ksSUFBSSxDQUFDLFdBQVcsR0FBRyxjQUFDLENBQUMsdUNBQXVDLENBQUMsQ0FBQztRQUM5RCxJQUFJLENBQUMsZ0JBQWdCLEdBQUcsY0FBQyxDQUFDLDRDQUE0QyxDQUFDLENBQUM7UUFDeEUsSUFBSSxDQUFDLHdCQUF3QixHQUFHLGVBQUUsQ0FBQyxvREFBb0QsQ0FBQyxDQUFDLEdBQUcsQ0FBQyxDQUFDLENBQUMsQ0FBQyxFQUFFLENBQUMsYUFBYSxDQUFDLENBQUM7UUFDbEgsSUFBSSxDQUFDLGdCQUFnQixHQUFHLGNBQUMsQ0FBQyxVQUFVLENBQUMsQ0FBQztRQUN0QyxJQUFJLENBQUMsa0JBQWtCLEdBQUMsSUFBSSxDQUFDLGdCQUFnQixDQUFDLEVBQUUsQ0FBQyxvQkFBb0IsQ0FBQyxDQUFDLEdBQUcsQ0FBQyxDQUFDLENBQUMsQ0FBQztRQUM5RSxJQUFJLENBQUMsZ0JBQWdCLEdBQUcsSUFBSSxDQUFDLGtCQUFrQixDQUFDLEVBQUUsQ0FBQyxpQkFBaUIsQ0FBQyxDQUFDLEdBQUcsQ0FBQyxDQUFDLENBQUMsQ0FBQyxFQUFFLENBQUMsTUFBTSxDQUFDLENBQUMsR0FBRyxDQUFDLENBQUMsQ0FBQyxDQUFDO1FBQy9GLElBQUcsSUFBSSxDQUFDLHdCQUF3QixFQUFDO1lBQzdCLElBQUksQ0FBQyxpQkFBaUIsRUFBRSxDQUFDO1lBQ3pCLElBQUksQ0FBQyxjQUFjLEVBQUUsQ0FBQztTQUN6QjtJQUNMLENBQUM7SUFDRCw2Q0FBaUIsR0FBakI7UUFDSSxJQUFJLENBQUMsY0FBYyxHQUFHLElBQUksQ0FBQyx3QkFBd0IsQ0FBQyxHQUFHLENBQUMsQ0FBQyxDQUFDLENBQUM7SUFDL0QsQ0FBQztJQUNELDBDQUFjLEdBQWQ7UUFDSSxJQUFJLENBQUMsV0FBVyxHQUFHLElBQUksQ0FBQyx3QkFBd0IsQ0FBQyxHQUFHLENBQUMsQ0FBQyxDQUFDLENBQUE7SUFDM0QsQ0FBQztJQUNELGlEQUFxQixHQUFyQjtRQUNJLE9BQU8sSUFBSSxDQUFDLGtCQUFrQixDQUFDO0lBQ25DLENBQUM7SUFDRCwrQ0FBbUIsR0FBbkI7UUFDSSxPQUFPLElBQUksQ0FBQyxnQkFBZ0IsQ0FBQztJQUNqQyxDQUFDO0lBQ0QsMkNBQWUsR0FBZjtRQUNJLElBQUksQ0FBQyxZQUFZLEdBQUcsY0FBQyxDQUFDLGtCQUFrQixDQUFDLENBQUMsRUFBRSxDQUFDLGdCQUFnQixDQUFDLENBQUM7SUFDbkUsQ0FBQztJQUNELDJDQUFlLEdBQWYsVUFBZ0IsSUFBSTtRQUNoQixJQUFJLENBQUMsZUFBZSxFQUFFLENBQUM7UUFDdkIsT0FBTyxJQUFJLENBQUMsWUFBWSxDQUFDLEdBQUcsQ0FBQyxJQUFJLENBQUMsQ0FBQztJQUN2QyxDQUFDO0lBRUQsZ0RBQW9CLEdBQXBCO1FBQ0ksT0FBTyxJQUFJLENBQUMsV0FBVyxDQUFDLFNBQVMsRUFBRSxDQUFDO0lBQ3hDLENBQUM7SUFFRCxxREFBeUIsR0FBekI7UUFDSSxPQUFPLElBQUksQ0FBQyxnQkFBZ0IsQ0FBQyxTQUFTLEVBQUUsQ0FBQztJQUM3QyxDQUFDO0lBRUQsbURBQXVCLEdBQXZCO1FBQ0ksT0FBTyxJQUFJLENBQUMsY0FBYyxDQUFDLFNBQVMsRUFBRSxDQUFDO0lBQzNDLENBQUM7SUFFRCxnREFBb0IsR0FBcEI7UUFDSSxPQUFPLElBQUksQ0FBQyxXQUFXLENBQUMsU0FBUyxFQUFFLENBQUM7SUFDeEMsQ0FBQztJQUNMLHdCQUFDO0FBQUQsQ0FBQyxBQTFERCxJQTBEQztBQTFEWSw4Q0FBaUIifQ==
