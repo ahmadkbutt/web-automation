@@ -1,68 +1,91 @@
-import {$, $$, ElementArrayFinder, ElementFinder} from "protractor";
+import {$, $$, ElementFinder} from "protractor";
+import {FlightForm, TripForm} from "../interfaces/flightpage.interface";
 
 export class FlightsPageObject {
-    public originField: ElementFinder;
-    public destinationField:ElementFinder;
-    private readonly departureAndReturnFields:ElementArrayFinder;
-    public departureField:ElementFinder;
-    public returnField:ElementFinder;
-    private tripDropdownForm: ElementFinder;
-    public tripDropDownButton:ElementFinder;
-    public selectedTripType:ElementFinder;
-    public tripTypeList:ElementArrayFinder;
+    public flightForm: FlightForm
+    public tripDropDownForm: TripForm;
+    flightFormBody: ElementFinder;
+    tripDropDownBody: ElementFinder;
 
     constructor() {
-        this.originField = $("div[aria-label='Flight origin input']");
-        this.destinationField = $("div[aria-label='Flight destination input']");
-        this.departureAndReturnFields = $$("div[aria-label='Departure and return dates input']").get(0).$$('.cQtq-input');
-        this.tripDropdownForm = $('div.zcIg');
-        this.tripDropDownButton=this.tripDropdownForm.$$("div[role='button']").get(0);
-        this.selectedTripType = this.tripDropDownButton.$$('div.wIIH-handle').get(0).$$('span').get(0);
-        if(this.departureAndReturnFields){
-            this.setDepartureField();
-            this.setReturnField();
+        this.flightFormBody = $$('div.q-kF-formBody').get(0);
+        this.flightForm = {
+            body: this.flightFormBody,
+            origin: this.flightFormBody.$('div.q-kF-origin'),
+            destination: this.flightFormBody.$('div.q-kF-destination'),
+            multiDate: this.flightFormBody.$('div.q-kF-dates'),
+            singleDate: this.flightFormBody.$('div.q-kF-date'),
+            cabin: this.flightFormBody.$('div.q-kF-cabin'),
+        }
+        this.tripDropDownBody = $$('div.zcIg').get(0);
+        this.tripDropDownForm = {
+            body: this.tripDropDownBody,
+            type: {
+                container: this.tripDropDownBody.$$("div[role='button']").get(0),
+                selectedType: this.tripDropDownBody.$$('div.wIIH-handle').get(0).$$('span').get(0),
+            },
+            traveller: {
+                container: this.tripDropDownBody.$$("div[role='button']").get(1),
+                modal: {
+                    errorMessage: $('div.UKFa-errorMessage').$('div.cAWq-mod-error').$('span')
+                }
+            }
         }
     }
 
-    //sets the departure element from departure and return date container
-    setDepartureField(){
-        this.departureField = this.departureAndReturnFields.get(0);
+    getTripTypeButton() {
+        return this.tripDropDownForm.type.container;
     }
 
-    //sets the return element from departure and return date container
-    setReturnField(){
-        this.returnField = this.departureAndReturnFields.get(1)
+    getTravellersDropDownButton() {
+        return this.tripDropDownForm.traveller.container;
     }
-    getTripDropDownButton(){
-        return this.tripDropDownButton;
+
+    getTravellerOptionButton(item: number, buttonType: string) {
+        this.setTravellersModalOptions();
+        const travellerOption = this.tripDropDownForm.traveller.modal.container.$$('div.u9Xa').get(item);
+        return buttonType === 'increment' ? travellerOption.$$("button").get(1) : travellerOption.$$("button").get(0);
     }
-    getSelectedTripType(){
-        return this.selectedTripType;
+
+    setTravellersModalOptions() {
+        this.tripDropDownForm.traveller.modal.container = $('div.UKFa-dropdownOptions');
+    }
+
+    getTravellerOptionErrorMessage() {
+        return this.tripDropDownForm.traveller.modal.errorMessage;
+    }
+
+    getSelectedTripType() {
+        return this.tripDropDownForm.type.selectedType;
     }
 
     //sets trip type list from trip type dialog
-    setTripTypeList(){
-        this.tripTypeList = $('div.xvRy-content').$$("li[role='tab']");
+    setTripTypeList() {
+        this.tripDropDownForm.type.typeList = $('div.xvRy-content').$$("li[role='tab']");
     }
 
-    getTripTypeItem(item){
+    getTripTypeItem(item: number) {
         this.setTripTypeList();
-        return this.tripTypeList.get(item);
+        return this.tripDropDownForm.type.typeList.get(item);
     }
 
-    isOriginFieldPresent(){
-        return this.originField.isPresent();
+    isOriginFieldPresent() {
+        return this.flightForm.origin.isPresent();
     }
 
-    isDestinationFieldPresent(){
-        return this.destinationField.isPresent();
+    isDestinationFieldPresent() {
+        return this.flightForm.destination.isPresent();
     }
 
-    isDepartureFieldPresent(){
-        return this.departureField.isPresent();
+    isMultiDateFieldPresent() {
+        return this.flightForm.multiDate.isPresent();
     }
 
-    isReturnFieldPresent(){
-        return this.returnField.isPresent();
+    isSingleDateFieldPresent() {
+        return this.flightForm.singleDate.isPresent();
+    }
+
+    isCabinFieldPresent() {
+        return this.flightForm.cabin.isPresent();
     }
 }

@@ -43,7 +43,7 @@ export let config: Config = {
   // specs: [ 'specs/**/*spec.js' ],
   //   specs: [ 'specs/**/login.spec.js' ],
 
-  specs: ["specs/**/plugin.spec.js"],
+  specs: ["specs/**/**.spec.js"],
 
   seleniumAddress: "http://localhost:4444/wd/hub",
 };
