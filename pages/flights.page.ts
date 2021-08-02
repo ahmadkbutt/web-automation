@@ -23,6 +23,7 @@ export class FlightsPageObject {
                 input: this.searchContainer.$("input.k_my-input"),
                 existingList: $$("div.vvTc[role='list']").get(0).$$("div[role='listitem']"),
                 resultsList: this.searchContainer.$('div.c8GSD-overlay-dropdown').$("ul[role='tablist']").$$('li'),
+                destinationResult: $$('div.d_E3').get(1).$("div.vvTc[role='list']").$("div[role='listitem']"),
             }
         }
         this.tripDropDownBody = $$('div.zcIg').get(0);
@@ -100,6 +101,9 @@ export class FlightsPageObject {
     getOrigin(){
         return this.flightForm.origin;
     }
+    getDestination(){
+        return this.flightForm.destination;
+    }
     getExistingItemsFromSearch(){
         return this.flightForm.search.existingList;
     }
@@ -110,7 +114,13 @@ export class FlightsPageObject {
         return this.flightForm.search.resultsList.get(itemNumber);
     }
     getSearchedItem(){
-        return this.flightForm.search.existingList.get(0).$('div.vvTc-item-value')
+        return this.flightForm.search.existingList.get(1).$('div.vvTc-item-value')
     }
 
+    getDestinationResult(){
+        return this.flightForm.search.destinationResult
+    }
+    getNoOfTravellers(){
+        return this.tripDropDownForm.traveller.container.$('span');
+    }
 }

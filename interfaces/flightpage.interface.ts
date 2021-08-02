@@ -11,7 +11,8 @@ interface FlightForm{
         container: ElementFinder,
         existingList: ElementArrayFinder,
         input:ElementFinder,
-        resultsList: ElementArrayFinder
+        resultsList: ElementArrayFinder,
+        destinationResult: ElementFinder
     }
 }
 

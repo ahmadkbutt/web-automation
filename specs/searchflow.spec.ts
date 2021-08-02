@@ -40,4 +40,35 @@ describe("Search Flow", () => {
         let searchedItem = await flightsPage.getSearchedItem().getText();
         expect(searchedItem).to.equal('Paris (PAR)')
     })
+
+    it('should enter NYC in the destination field', async () => {
+        flightsPage = new FlightsPageObject();
+        flightsPage.getDestination().click();
+        browser.sleep(3000);
+
+        flightsPage.getSearchInput().sendKeys('NYC');
+        browser.sleep(2000);
+
+        flightsPage = new FlightsPageObject();
+        let searchResult = flightsPage.getSearchResultItem(0)
+        searchResult.click();
+
+        browser.sleep(2000);
+        flightsPage = new FlightsPageObject();
+        let searchedItem = await flightsPage.getDestinationResult().getText();
+        expect(searchedItem).to.equal('New York (NYC)')
+    })
+
+    it('should display 4 travellers ', async () => {
+        flightsPage.getTravellersDropDownButton().click();
+        browser.sleep(2000);
+        const adultTravelers = flightsPage.getTravellerOptionButton(0 , 'increment');
+        for(let i = 0 ; i<3 ; i++){
+            adultTravelers.click()
+        }
+        flightsPage = new FlightsPageObject();
+        const noOfTravellers = await flightsPage.getNoOfTravellers().getText();
+        expect(noOfTravellers).to.be.equal('4 travelers')
+        browser.sleep(4000);
+    })
 });
