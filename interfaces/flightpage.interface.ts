@@ -7,6 +7,12 @@ interface FlightForm{
     multiDate: ElementFinder;
     singleDate: ElementFinder;
     cabin: ElementFinder;
+    search: {
+        container: ElementFinder,
+        existingList: ElementArrayFinder,
+        input:ElementFinder,
+        resultsList: ElementArrayFinder
+    }
 }
 
 interface TripForm {

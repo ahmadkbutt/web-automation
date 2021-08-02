@@ -6,9 +6,11 @@ export class FlightsPageObject {
     public tripDropDownForm: TripForm;
     flightFormBody: ElementFinder;
     tripDropDownBody: ElementFinder;
+   searchContainer: ElementFinder;
 
     constructor() {
         this.flightFormBody = $$('div.q-kF-formBody').get(0);
+        this.searchContainer = $('div.c8GSD-content');
         this.flightForm = {
             body: this.flightFormBody,
             origin: this.flightFormBody.$('div.q-kF-origin'),
@@ -16,6 +18,12 @@ export class FlightsPageObject {
             multiDate: this.flightFormBody.$('div.q-kF-dates'),
             singleDate: this.flightFormBody.$('div.q-kF-date'),
             cabin: this.flightFormBody.$('div.q-kF-cabin'),
+            search: {
+                container: this.searchContainer,
+                input: this.searchContainer.$("input.k_my-input"),
+                existingList: $$("div.vvTc[role='list']").get(0).$$("div[role='listitem']"),
+                resultsList: this.searchContainer.$('div.c8GSD-overlay-dropdown').$("ul[role='tablist']").$$('li'),
+            }
         }
         this.tripDropDownBody = $$('div.zcIg').get(0);
         this.tripDropDownForm = {
@@ -41,9 +49,9 @@ export class FlightsPageObject {
         return this.tripDropDownForm.traveller.container;
     }
 
-    getTravellerOptionButton(item: number, buttonType: string) {
+    getTravellerOptionButton(itemNumber: number, buttonType: string) {
         this.setTravellersModalOptions();
-        const travellerOption = this.tripDropDownForm.traveller.modal.container.$$('div.u9Xa').get(item);
+        const travellerOption = this.tripDropDownForm.traveller.modal.container.$$('div.u9Xa').get(itemNumber);
         return buttonType === 'increment' ? travellerOption.$$("button").get(1) : travellerOption.$$("button").get(0);
     }
 
@@ -88,4 +96,21 @@ export class FlightsPageObject {
     isCabinFieldPresent() {
         return this.flightForm.cabin.isPresent();
     }
+
+    getOrigin(){
+        return this.flightForm.origin;
+    }
+    getExistingItemsFromSearch(){
+        return this.flightForm.search.existingList;
+    }
+    getSearchInput(){
+        return this.flightForm.search.input;
+    }
+    getSearchResultItem(itemNumber: number){
+        return this.flightForm.search.resultsList.get(itemNumber);
+    }
+    getSearchedItem(){
+        return this.flightForm.search.existingList.get(0).$('div.vvTc-item-value')
+    }
+
 }
