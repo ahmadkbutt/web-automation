@@ -21,6 +21,7 @@ export class FlightsPageObject {
             singleDate: this.flightFormBody.$('div.q-kF-date'),
             cabin: this.flightFormBody.$('div.q-kF-cabin'),
             search: {
+                submit: this.flightFormBody.$('div.q-kF-submit'),
                 container: this.modalContainer,
                 input: this.modalContainer.$("input.k_my-input"),
                 existingList: $$("div.vvTc[role='list']").get(0).$$("div[role='listitem']"),
@@ -157,5 +158,8 @@ export class FlightsPageObject {
     }
     getReturnDate(){
         return this.flightForm.multiDate.$$('div.cQtq-input').get(1).$('span.cQtq-value');
+    }
+    getSearchButton(){
+        return this.flightForm.search.submit.$('button');
     }
 }

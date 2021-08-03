@@ -8,6 +8,7 @@ interface FlightForm{
     singleDate: ElementFinder;
     cabin: ElementFinder;
     search: {
+        submit: ElementFinder,
         container: ElementFinder,
         existingList: ElementArrayFinder,
         input:ElementFinder,

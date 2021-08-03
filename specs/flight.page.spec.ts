@@ -102,6 +102,5 @@ describe('Step 5', () => {
     const errorMessage = await flightsPage.getTravellerOptionErrorMessage().getText();
     expect(errorMessage).to.equal('Searches cannot have more than 9 adults');
     browser.sleep(2000);
-
   })
 })

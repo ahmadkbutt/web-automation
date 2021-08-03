@@ -2,7 +2,8 @@ import {browser} from "protractor";
 import {expect} from "chai";
 import {HomePageObject} from "../pages/home.page";
 import {FlightsPageObject} from "../pages/flights.page";
-import {formatMonth} from "../helper/helper";
+import {FlightResultsPageObject} from "./flight-results.page.spec";
+import {convertDollarToInt, formatMonth} from "../helper/helper";
 
 let flightsPage: FlightsPageObject;
 
@@ -145,5 +146,22 @@ describe('Step 7', () => {
         const returnText = await flightsPage.getReturnDate().getText();
         const returnDate = returnText.split(' ')[1];
         expect(returnDate).to.equal(`${expectedReturnMonth}/${expectedReturnDate}`);
+    })
+})
+
+describe('Step 8', () => {
+    it('should click search', () => {
+        const searchButton = flightsPage.getSearchButton();
+        searchButton.click();
+        browser.sleep(20000);
+    })
+    const flightsResults = new FlightResultsPageObject();
+
+    it('should display least price in cheapest', async () => {
+        const cheapestPrice = await flightsResults.getPrice('price').getText();
+        const bestPrice = await flightsResults.getPrice('bestflight').getText();
+        const quickestPrice = await flightsResults.getPrice('duration').getText();
+        expect(convertDollarToInt(cheapestPrice)).to.be.lessThan(convertDollarToInt(bestPrice));
+        expect(convertDollarToInt(cheapestPrice)).to.be.lessThan(convertDollarToInt(quickestPrice));
     })
 })
