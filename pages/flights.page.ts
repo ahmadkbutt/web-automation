@@ -114,13 +114,13 @@ export class FlightsPageObject {
         return this.flightForm.search.resultsList.get(itemNumber);
     }
     getSearchedItem(){
-        return this.flightForm.search.existingList.get(1).$('div.vvTc-item-value')
+        return this.flightForm.search.existingList.get(0).$('div.vvTc-item-value')
     }
 
     getDestinationResult(){
         return this.flightForm.search.destinationResult
     }
     getNoOfTravellers(){
-        return this.tripDropDownForm.traveller.container.$('span');
+        return this.tripDropDownForm.traveller.container.$$('span').get(0);
     }
 }

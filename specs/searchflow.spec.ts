@@ -56,7 +56,7 @@ describe("Search Flow", () => {
         browser.sleep(2000);
         flightsPage = new FlightsPageObject();
         let searchedItem = await flightsPage.getDestinationResult().getText();
-        expect(searchedItem).to.equal('New York (NYC)')
+        expect(searchedItem).to.equal('New York, NY (NYC)')
     })
 
     it('should display 4 travellers ', async () => {
@@ -68,7 +68,17 @@ describe("Search Flow", () => {
         }
         flightsPage = new FlightsPageObject();
         const noOfTravellers = await flightsPage.getNoOfTravellers().getText();
-        expect(noOfTravellers).to.be.equal('4 travelers')
+        expect(noOfTravellers).to.be.equal('4 travelers');
+        browser.sleep(4000);
+    })
+    it('should display 6 travellers ', async () => {
+        const childTravellers = flightsPage.getTravellerOptionButton(4 , 'increment');
+        for(let i = 0 ; i<2 ; i++){
+            childTravellers.click()
+        }
+        flightsPage = new FlightsPageObject();
+        const noOfTravellers = await flightsPage.getNoOfTravellers().getText();
+        expect(noOfTravellers).to.be.equal('6 travelers');
         browser.sleep(4000);
     })
 });
