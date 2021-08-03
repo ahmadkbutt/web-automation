@@ -12,7 +12,19 @@ interface FlightForm{
         existingList: ElementArrayFinder,
         input:ElementFinder,
         resultsList: ElementArrayFinder,
-        destinationResult: ElementFinder
+        destinationResult: ElementFinder,
+        calendar: {
+            wrapper: ElementFinder,
+            controls: {
+                back: ElementFinder,
+                next: ElementFinder
+            },
+            month: {
+                wrapper: ElementFinder,
+                departure: ElementFinder,
+                return: ElementFinder,
+            }
+        }
     }
 }
 

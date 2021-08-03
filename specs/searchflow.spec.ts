@@ -1,9 +1,10 @@
-import { browser } from "protractor";
-import { expect } from "chai";
-import { HomePageObject } from "../pages/home.page";
-import { FlightsPageObject } from "../pages/flights.page";
+import {browser} from "protractor";
+import {expect} from "chai";
+import {HomePageObject} from "../pages/home.page";
+import {FlightsPageObject} from "../pages/flights.page";
+import {formatMonth} from "../helper/helper";
 
-let flightsPage:FlightsPageObject;
+let flightsPage: FlightsPageObject;
 
 describe("Search Flow", () => {
     const homepage: HomePageObject = new HomePageObject();
@@ -15,8 +16,11 @@ describe("Search Flow", () => {
     it("should navigate to flights page", async () => {
         homepage.getFlightsLink().click();
         expect(await browser.getCurrentUrl()).to.contains("flights");
-        browser.sleep(5000);
     });
+
+});
+
+describe('Step 2', () => {
     it('should enter PAR in the field', async () => {
         flightsPage = new FlightsPageObject();
         flightsPage.getOrigin().click();
@@ -40,6 +44,9 @@ describe("Search Flow", () => {
         let searchedItem = await flightsPage.getSearchedItem().getText();
         expect(searchedItem).to.equal('Paris (PAR)')
     })
+});
+
+describe('Step 3', () => {
 
     it('should enter NYC in the destination field', async () => {
         flightsPage = new FlightsPageObject();
@@ -58,7 +65,9 @@ describe("Search Flow", () => {
         let searchedItem = await flightsPage.getDestinationResult().getText();
         expect(searchedItem).to.equal('New York, NY (NYC)')
     })
+})
 
+describe('Step 4', () => {
     it('should display 4 travellers ', async () => {
         flightsPage.getTravellersDropDownButton().click();
         browser.sleep(2000);
@@ -71,6 +80,10 @@ describe("Search Flow", () => {
         expect(noOfTravellers).to.be.equal('4 travelers');
         browser.sleep(4000);
     })
+})
+
+describe('Step 5', () => {
+
     it('should display 6 travellers ', async () => {
         const childTravellers = flightsPage.getTravellerOptionButton(4 , 'increment');
         for(let i = 0 ; i<2 ; i++){
@@ -81,4 +94,56 @@ describe("Search Flow", () => {
         expect(noOfTravellers).to.be.equal('6 travelers');
         browser.sleep(4000);
     })
-});
+})
+
+describe('Step 6', () => {
+    flightsPage = new FlightsPageObject();
+    it('Set ‘departure date’ as ‘current date +3’.', async () => {
+
+        const departureField = flightsPage.getDepartureField();
+        departureField.click();
+        const expectedDepartureDate = new Date().getDate() + 3;
+        const expectedDepartureMonth = new Date().getMonth() + 1;
+
+        flightsPage = new FlightsPageObject();
+        const currentDepartureDate = await flightsPage.getDepartureCalendar().getAttribute('data-month');
+        const currentDepartureMonth = currentDepartureDate.split('-')[1];
+        if (currentDepartureMonth !== formatMonth(expectedDepartureMonth)) {
+            let backButton = flightsPage.getBackButton();
+            backButton.click();
+        }
+
+        browser.sleep(5000);
+
+        flightsPage = new FlightsPageObject();
+        const selectedDate = flightsPage.getDateElementFromCalender(expectedDepartureDate);
+        selectedDate.click();
+        browser.sleep(5000);
+
+        flightsPage = new FlightsPageObject();
+        const departureText = await flightsPage.getDepartureDate().getText();
+        const departureDate = departureText.split(' ')[1];
+        expect(departureDate).to.equal(`${expectedDepartureMonth}/${expectedDepartureDate}`);
+        browser.sleep(5000);
+    })
+})
+
+describe('Step 7', () => {
+    flightsPage = new FlightsPageObject();
+    it('Set ‘return date’ as ‘current date +6’.', async () => {
+
+        const expectedReturnDate = new Date().getDate() + 6;
+        const expectedReturnMonth = new Date().getMonth() + 1;
+        browser.sleep(5000);
+
+        flightsPage = new FlightsPageObject();
+        const selectedDate = flightsPage.getDateElementFromCalender(expectedReturnDate);
+        selectedDate.click();
+        browser.sleep(5000);
+
+        flightsPage = new FlightsPageObject();
+        const returnText = await flightsPage.getReturnDate().getText();
+        const returnDate = returnText.split(' ')[1];
+        expect(returnDate).to.equal(`${expectedReturnMonth}/${expectedReturnDate}`);
+    })
+})

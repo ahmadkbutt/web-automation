@@ -6,11 +6,13 @@ export class FlightsPageObject {
     public tripDropDownForm: TripForm;
     flightFormBody: ElementFinder;
     tripDropDownBody: ElementFinder;
-   searchContainer: ElementFinder;
+   modalContainer: ElementFinder;
+   calendarWrapper: ElementFinder;
 
     constructor() {
         this.flightFormBody = $$('div.q-kF-formBody').get(0);
-        this.searchContainer = $('div.c8GSD-content');
+        this.modalContainer = $('div.c8GSD-content');
+        this.calendarWrapper = this.modalContainer.$('div.jjvn-calendarWrapper').$("div[role='tab']");
         this.flightForm = {
             body: this.flightFormBody,
             origin: this.flightFormBody.$('div.q-kF-origin'),
@@ -19,11 +21,23 @@ export class FlightsPageObject {
             singleDate: this.flightFormBody.$('div.q-kF-date'),
             cabin: this.flightFormBody.$('div.q-kF-cabin'),
             search: {
-                container: this.searchContainer,
-                input: this.searchContainer.$("input.k_my-input"),
+                container: this.modalContainer,
+                input: this.modalContainer.$("input.k_my-input"),
                 existingList: $$("div.vvTc[role='list']").get(0).$$("div[role='listitem']"),
-                resultsList: this.searchContainer.$('div.c8GSD-overlay-dropdown').$("ul[role='tablist']").$$('li'),
+                resultsList: this.modalContainer.$('div.c8GSD-overlay-dropdown').$("ul[role='tablist']").$$('li'),
                 destinationResult: $$('div.d_E3').get(1).$("div.vvTc[role='list']").$("div[role='listitem']"),
+                calendar: {
+                    wrapper: this.calendarWrapper,
+                    controls: {
+                        back: this.calendarWrapper.$('div.Fj7W').$$("div[role='button]'").get(0),
+                        next: this.calendarWrapper.$('div.Fj7W').$$("div[role='button]'").get(1)
+                    },
+                    month: {
+                        wrapper: this.calendarWrapper.$('div.ATGJ-monthWrapper'),
+                        departure: this.calendarWrapper.$('div.ATGJ-monthWrapper').$$('div.onx_').get(0),
+                        return: this.calendarWrapper.$('div.ATGJ-monthWrapper').$$('div.onx_').get(1),
+                    }
+                }
             }
         }
         this.tripDropDownBody = $$('div.zcIg').get(0);
@@ -122,5 +136,26 @@ export class FlightsPageObject {
     }
     getNoOfTravellers(){
         return this.tripDropDownForm.traveller.container.$$('span').get(0);
+    }
+    getDepartureField(){
+        return this.flightForm.multiDate.$$('div.cQtq-input').get(0);
+    }
+    getReturnField(){
+        return this.flightForm.multiDate.$$('div.cQtq-input').get(1);
+    }
+    getBackButton(){
+        return this.modalContainer.$('div.jjvn-calendarWrapper').$('div.Fj7W').$$("div[role='button']").get(0);
+    }
+    getDepartureCalendar(){
+        return this.flightForm.search.calendar.month.departure;
+    }
+    getDateElementFromCalender(date:number) {
+        return this.modalContainer.$('div.jjvn-calendarWrapper').$$('div.onx_').get(0).$('div.onx_-days').$$('div').get(date - 1);
+    }
+    getDepartureDate(){
+        return this.flightForm.multiDate.$$('div.cQtq-input').get(0).$('span.cQtq-value');
+    }
+    getReturnDate(){
+        return this.flightForm.multiDate.$$('div.cQtq-input').get(1).$('span.cQtq-value');
     }
 }
