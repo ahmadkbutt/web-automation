@@ -1,17 +1,17 @@
-import { $, ElementFinder } from "protractor";
+import {$, ElementFinder} from "protractor";
 
 export class HomePageObject {
     public url:string;
-    public flightsNavItem: ElementFinder;
+    public flightsNavItem: string;
 
     constructor() {
         this.url = 'https://www.kayak.com';
-        this.flightsNavItem = $("a[aria-label='Search for flights']");
+        this.flightsNavItem = "a[aria-label='Search for flights']"
     }
-    getUrl = () => {
+    getUrl = (): string => {
         return this.url;
     }
-    getFlightsLink = () => {
-        return this.flightsNavItem
+    getFlightsLink = (): ElementFinder => {
+        return $(this.flightsNavItem)
     }
 }

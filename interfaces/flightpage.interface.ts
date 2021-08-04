@@ -1,46 +1,75 @@
-import {ElementArrayFinder, ElementFinder} from "protractor";
-
 interface FlightForm{
-    body?: ElementFinder;
-    origin: ElementFinder;
-    destination: ElementFinder;
-    multiDate: ElementFinder;
-    singleDate: ElementFinder;
-    cabin: ElementFinder;
-    search: {
-        submit: ElementFinder,
-        container: ElementFinder,
-        existingList: ElementArrayFinder,
-        input:ElementFinder,
-        resultsList: ElementArrayFinder,
-        destinationResult: ElementFinder,
+    modal: {
+        container: string,
+        input: string,
+        existingList: {
+            parent: string,
+            child: string
+        },
+        searchedItem: string,
+        resultsList: {
+            parent: string,
+            child: string,
+            subChild: string
+        },
+        destinationResult: {
+            parent: string,
+            child: string,
+            subChild: string
+        },
         calendar: {
-            wrapper: ElementFinder,
+            wrapper: {
+                parent: string,
+                child: string
+            },
             controls: {
-                back: ElementFinder,
-                next: ElementFinder
+                back: {
+                    parent: string,
+                    child: string
+                }
             },
             month: {
-                wrapper: ElementFinder,
-                departure: ElementFinder,
-                return: ElementFinder,
+                wrapper: string,
+                departure: {
+                    parent: string,
+                    child: string
+                },
+                dateElement: {
+                    parent: string,
+                    child: string
+                }
             }
         }
     }
 }
 
 interface TripForm {
-    body: ElementFinder;
+    body: string,
+    container: string,
     type: {
-        container: ElementFinder;
-        selectedType: ElementFinder;
-        typeList?: ElementArrayFinder;
+        selected: {
+            parent: string,
+            child: string
+        },
+        list: {
+            parent: string,
+            child: string
+        }
     },
     traveller: {
-        container: ElementFinder;
+        container: string,
+        count: string,
         modal: {
-            container?: ElementFinder;
-            errorMessage: ElementFinder;
+            container: string,
+            errorMessage: {
+                parent: string,
+                child: string,
+                subChild: string
+            },
+            option: {
+                container: string,
+                element: string
+            }
         }
     }
 }

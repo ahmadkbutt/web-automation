@@ -1,165 +1,193 @@
-import {$, $$, ElementFinder} from "protractor";
+import {$, $$, ElementArrayFinder, ElementFinder} from "protractor";
+import {FlightsearchClass} from "../common/flightsearch.class";
 import {FlightForm, TripForm} from "../interfaces/flightpage.interface";
 
-export class FlightsPageObject {
-    public flightForm: FlightForm
-    public tripDropDownForm: TripForm;
-    flightFormBody: ElementFinder;
-    tripDropDownBody: ElementFinder;
-   modalContainer: ElementFinder;
-   calendarWrapper: ElementFinder;
+export class FlightsPage extends FlightsearchClass {
+    private flightForm: FlightForm;
+    private tripForm: TripForm;
 
     constructor() {
-        this.flightFormBody = $$('div.q-kF-formBody').get(0);
-        this.modalContainer = $('div.c8GSD-content');
-        this.calendarWrapper = this.modalContainer.$('div.jjvn-calendarWrapper').$("div[role='tab']");
-        this.flightForm = {
-            body: this.flightFormBody,
-            origin: this.flightFormBody.$('div.q-kF-origin'),
-            destination: this.flightFormBody.$('div.q-kF-destination'),
-            multiDate: this.flightFormBody.$('div.q-kF-dates'),
-            singleDate: this.flightFormBody.$('div.q-kF-date'),
-            cabin: this.flightFormBody.$('div.q-kF-cabin'),
-            search: {
-                submit: this.flightFormBody.$('div.q-kF-submit'),
-                container: this.modalContainer,
-                input: this.modalContainer.$("input.k_my-input"),
-                existingList: $$("div.vvTc[role='list']").get(0).$$("div[role='listitem']"),
-                resultsList: this.modalContainer.$('div.c8GSD-overlay-dropdown').$("ul[role='tablist']").$$('li'),
-                destinationResult: $$('div.d_E3').get(1).$("div.vvTc[role='list']").$("div[role='listitem']"),
+        super();
+        const flightForm = {
+            modal: {
+                container: 'div.c8GSD-content',
+                input: "input.k_my-input",
+                existingList: {
+                    parent: "div.vvTc[role='list']",
+                    child: "div[role='listitem']"
+                },
+                searchedItem: 'div.vvTc-item-value',
+                resultsList: {
+                    parent: 'div.c8GSD-overlay-dropdown',
+                    child: "ul[role='tablist']",
+                    subChild: 'li'
+                },
+                destinationResult: {
+                    parent: 'div.d_E3',
+                    child: "div.vvTc[role='list']",
+                    subChild: "div[role='listitem']"
+                },
                 calendar: {
-                    wrapper: this.calendarWrapper,
+                    wrapper: {
+                        parent: 'div.jjvn-calendarWrapper',
+                        child: "div[role='tab']"
+                    },
                     controls: {
-                        back: this.calendarWrapper.$('div.Fj7W').$$("div[role='button]'").get(0),
-                        next: this.calendarWrapper.$('div.Fj7W').$$("div[role='button]'").get(1)
+                        back: {
+                            parent: 'div.Fj7W',
+                            child: "div[role='button']"
+                        }
                     },
                     month: {
-                        wrapper: this.calendarWrapper.$('div.ATGJ-monthWrapper'),
-                        departure: this.calendarWrapper.$('div.ATGJ-monthWrapper').$$('div.onx_').get(0),
-                        return: this.calendarWrapper.$('div.ATGJ-monthWrapper').$$('div.onx_').get(1),
+                        wrapper: 'div.ATGJ-monthWrapper',
+                        departure: {
+                            parent: 'div.ATGJ-monthWrapper',
+                            child: 'div.onx_'
+                        },
+                        dateElement: {
+                            parent: 'div.onx_-days',
+                            child: 'div'
+                        }
                     }
                 }
             }
         }
-        this.tripDropDownBody = $$('div.zcIg').get(0);
-        this.tripDropDownForm = {
-            body: this.tripDropDownBody,
+        this.flightForm = flightForm;
+        const tripForm = {
+            body: 'div.zcIg',
+            container: "div[role='button']",
             type: {
-                container: this.tripDropDownBody.$$("div[role='button']").get(0),
-                selectedType: this.tripDropDownBody.$$('div.wIIH-handle').get(0).$$('span').get(0),
+                selected: {
+                    parent: 'div.wIIH-handle',
+                    child: 'span'
+                },
+                list: {
+                    parent: 'div.xvRy-content',
+                    child: "li[role='tab']"
+                }
             },
             traveller: {
-                container: this.tripDropDownBody.$$("div[role='button']").get(1),
+                container: "div[role='button']",
+                count: 'span',
                 modal: {
-                    errorMessage: $('div.UKFa-errorMessage').$('div.cAWq-mod-error').$('span')
+                    container: 'div.UKFa-dropdownOptions',
+                    errorMessage: {
+                        parent: 'div.UKFa-errorMessage',
+                        child: 'div.cAWq-mod-error',
+                        subChild: 'span'
+                    },
+                    option: {
+                        container: 'div.u9Xa',
+                        element: "button"
+                    }
                 }
             }
         }
+        this.tripForm = tripForm
     }
 
-    getTripTypeButton() {
-        return this.tripDropDownForm.type.container;
+    getFlightFormModalContainer() : ElementFinder {
+        return $(this.flightForm.modal.container)
     }
 
-    getTravellersDropDownButton() {
-        return this.tripDropDownForm.traveller.container;
+    getSearchInput() : ElementFinder {
+        const {input} = this.flightForm.modal;
+        return this.getFlightFormModalContainer().$(input)
     }
 
-    getTravellerOptionButton(itemNumber: number, buttonType: string) {
-        this.setTravellersModalOptions();
-        const travellerOption = this.tripDropDownForm.traveller.modal.container.$$('div.u9Xa').get(itemNumber);
-        return buttonType === 'increment' ? travellerOption.$$("button").get(1) : travellerOption.$$("button").get(0);
+    getExistingItemsFromSearch() : ElementArrayFinder{
+        const {existingList} = this.flightForm.modal;
+        return $$(existingList.parent).get(0).$$(existingList.child);
     }
 
-    setTravellersModalOptions() {
-        this.tripDropDownForm.traveller.modal.container = $('div.UKFa-dropdownOptions');
+    getSearchedItem() : ElementFinder{
+        const {searchedItem} = this.flightForm.modal
+        return this.getExistingItemsFromSearch().get(0).$(searchedItem)
     }
 
-    getTravellerOptionErrorMessage() {
-        return this.tripDropDownForm.traveller.modal.errorMessage;
+    getResultsList() : ElementArrayFinder{
+        const {resultsList} = this.flightForm.modal
+        return this.getFlightFormModalContainer().$(resultsList.parent).$(resultsList.child)
+            .$$(resultsList.subChild);
     }
 
-    getSelectedTripType() {
-        return this.tripDropDownForm.type.selectedType;
+    getSearchResultItem(itemNumber: number) : ElementFinder {
+        return this.getResultsList().get(itemNumber);
     }
 
-    //sets trip type list from trip type dialog
-    setTripTypeList() {
-        this.tripDropDownForm.type.typeList = $('div.xvRy-content').$$("li[role='tab']");
+    getDestinationResult() : ElementFinder{
+        const {destinationResult} = this.flightForm.modal;
+        return $$(destinationResult.parent).get(1)
+            .$(destinationResult.child)
+            .$(destinationResult.subChild)
     }
 
-    getTripTypeItem(item: number) {
-        this.setTripTypeList();
-        return this.tripDropDownForm.type.typeList.get(item);
+    getCalendarWrapper() : ElementFinder{
+        const {wrapper} = this.flightForm.modal.calendar;
+        return this.getFlightFormModalContainer().$(wrapper.parent).$(wrapper.child);
     }
 
-    isOriginFieldPresent() {
-        return this.flightForm.origin.isPresent();
+    getBackButton() : ElementFinder{
+        const {wrapper, controls} = this.flightForm.modal.calendar;
+        const {back} = controls;
+        return this.getFlightFormModalContainer().$(wrapper.parent).$(back.parent).$$(back.child).get(0);
     }
 
-    isDestinationFieldPresent() {
-        return this.flightForm.destination.isPresent();
+    getDepartureCalendar() : ElementFinder{
+        const {departure} = this.flightForm.modal.calendar.month;
+        return this.getCalendarWrapper().$(departure.parent).$$(departure.child).get(0);
     }
 
-    isMultiDateFieldPresent() {
-        return this.flightForm.multiDate.isPresent();
+    getDateElementFromCalender(date: number) : ElementFinder{
+        const {calendar} = this.flightForm.modal;
+        const {wrapper, month} = calendar;
+        const {departure, dateElement} = month;
+
+        return this.getFlightFormModalContainer().$(wrapper.parent).$$(departure.child).get(0).$(dateElement.parent)
+            .$$(dateElement.child).get(date - 1);
     }
 
-    isSingleDateFieldPresent() {
-        return this.flightForm.singleDate.isPresent();
+    getTripFormBody() : ElementFinder{
+        return $$(this.tripForm.body).get(0);
     }
 
-    isCabinFieldPresent() {
-        return this.flightForm.cabin.isPresent();
+    getTravellerContainer() : ElementFinder{
+        const {container} = this.tripForm.traveller
+        return this.getTripFormBody().$$(container).get(1)
     }
 
-    getOrigin(){
-        return this.flightForm.origin;
-    }
-    getDestination(){
-        return this.flightForm.destination;
-    }
-    getExistingItemsFromSearch(){
-        return this.flightForm.search.existingList;
-    }
-    getSearchInput(){
-        return this.flightForm.search.input;
-    }
-    getSearchResultItem(itemNumber: number){
-        return this.flightForm.search.resultsList.get(itemNumber);
-    }
-    getSearchedItem(){
-        return this.flightForm.search.existingList.get(0).$('div.vvTc-item-value')
+    getTripTypeButton() : ElementFinder{
+        return this.getTripFormBody().$$(this.tripForm.container).get(0);
     }
 
-    getDestinationResult(){
-        return this.flightForm.search.destinationResult
+    getTravellersDropDownButton() : ElementFinder{
+        return this.getTripFormBody().$$(this.tripForm.traveller.container).get(1);
     }
-    getNoOfTravellers(){
-        return this.tripDropDownForm.traveller.container.$$('span').get(0);
+
+    getTravellerOptionButton(itemNumber: number, buttonType: string) : ElementFinder{
+        const {modal} = this.tripForm.traveller;
+        const {option} = modal;
+        const travellerOption = $(modal.container).$$(option.container).get(itemNumber);
+        return buttonType === 'increment' ? travellerOption.$$(option.element).get(1) : travellerOption.$$(option.element).get(0);
     }
-    getDepartureField(){
-        return this.flightForm.multiDate.$$('div.cQtq-input').get(0);
+
+    getTravellerOptionErrorMessage() : ElementFinder{
+        const {errorMessage} = this.tripForm.traveller.modal;
+        return $(errorMessage.parent).$(errorMessage.child).$(errorMessage.subChild)
     }
-    getReturnField(){
-        return this.flightForm.multiDate.$$('div.cQtq-input').get(1);
+
+    getNoOfTravellers() : ElementFinder{
+        const {count} = this.tripForm.traveller;
+        return this.getTravellerContainer().$$(count).get(0);
     }
-    getBackButton(){
-        return this.modalContainer.$('div.jjvn-calendarWrapper').$('div.Fj7W').$$("div[role='button']").get(0);
+
+    getSelectedTripType() : ElementFinder{
+        const {selected} = this.tripForm.type
+        return this.getTripFormBody().$$(selected.parent).get(0).$$(selected.child).get(0)
     }
-    getDepartureCalendar(){
-        return this.flightForm.search.calendar.month.departure;
-    }
-    getDateElementFromCalender(date:number) {
-        return this.modalContainer.$('div.jjvn-calendarWrapper').$$('div.onx_').get(0).$('div.onx_-days').$$('div').get(date - 1);
-    }
-    getDepartureDate(){
-        return this.flightForm.multiDate.$$('div.cQtq-input').get(0).$('span.cQtq-value');
-    }
-    getReturnDate(){
-        return this.flightForm.multiDate.$$('div.cQtq-input').get(1).$('span.cQtq-value');
-    }
-    getSearchButton(){
-        return this.flightForm.search.submit.$('button');
+
+    getTripTypeItem(item: number) : ElementFinder{
+        const {list} = this.tripForm.type
+        return $(list.parent).$$(list.child).get(item);
     }
 }

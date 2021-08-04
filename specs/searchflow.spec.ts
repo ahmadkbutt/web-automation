@@ -1,11 +1,11 @@
-import {browser, element} from "protractor";
+import {browser} from "protractor";
 import {expect} from "chai";
 import {HomePageObject} from "../pages/home.page";
-import {FlightsPageObject} from "../pages/flights.page";
 import {FlightResultsPageObject} from "../pages/flight-results.page";
 import {convertDollarToInt, formatMonth, getShortestTime} from "../helper/helper";
+import {FlightsPage} from "../pages/flights.page";
 
-let flightsPage: FlightsPageObject;
+let flightsPage: FlightsPage;
 
 describe("Search Flow", () => {
     const homepage: HomePageObject = new HomePageObject();
@@ -23,7 +23,7 @@ describe("Search Flow", () => {
 
 describe('Step 2', () => {
     it('should enter PAR in the field', async () => {
-        flightsPage = new FlightsPageObject();
+        flightsPage = new FlightsPage();
         flightsPage.getOrigin().click();
 
         let existingSearchItems = flightsPage.getExistingItemsFromSearch();
@@ -36,12 +36,12 @@ describe('Step 2', () => {
         flightsPage.getSearchInput().sendKeys('PAR');
         browser.sleep(2000);
 
-        flightsPage = new FlightsPageObject();
+        flightsPage = new FlightsPage();
         let searchResult = flightsPage.getSearchResultItem(0)
         searchResult.click();
 
         browser.sleep(2000);
-        flightsPage = new FlightsPageObject();
+        flightsPage = new FlightsPage();
         let searchedItem = await flightsPage.getSearchedItem().getText();
         expect(searchedItem).to.equal('Paris (PAR)')
     })
@@ -50,19 +50,19 @@ describe('Step 2', () => {
 describe('Step 3', () => {
 
     it('should enter NYC in the destination field', async () => {
-        flightsPage = new FlightsPageObject();
+        flightsPage = new FlightsPage();
         flightsPage.getDestination().click();
         browser.sleep(3000);
 
         flightsPage.getSearchInput().sendKeys('NYC');
         browser.sleep(2000);
 
-        flightsPage = new FlightsPageObject();
+        flightsPage = new FlightsPage();
         let searchResult = flightsPage.getSearchResultItem(0)
         searchResult.click();
 
         browser.sleep(2000);
-        flightsPage = new FlightsPageObject();
+        flightsPage = new FlightsPage();
         let searchedItem = await flightsPage.getDestinationResult().getText();
         expect(searchedItem).to.equal('New York, NY (NYC)')
     })
@@ -76,7 +76,7 @@ describe('Step 4', () => {
         for(let i = 0 ; i<3 ; i++){
             adultTravelers.click()
         }
-        flightsPage = new FlightsPageObject();
+        flightsPage = new FlightsPage();
         const noOfTravellers = await flightsPage.getNoOfTravellers().getText();
         expect(noOfTravellers).to.be.equal('4 travelers');
         browser.sleep(4000);
@@ -90,7 +90,7 @@ describe('Step 5', () => {
         for(let i = 0 ; i<2 ; i++){
             childTravellers.click()
         }
-        flightsPage = new FlightsPageObject();
+        flightsPage = new FlightsPage();
         const noOfTravellers = await flightsPage.getNoOfTravellers().getText();
         expect(noOfTravellers).to.be.equal('6 travelers');
         browser.sleep(4000);
@@ -98,7 +98,7 @@ describe('Step 5', () => {
 })
 
 describe('Step 6', () => {
-    flightsPage = new FlightsPageObject();
+    flightsPage = new FlightsPage();
     it('Set ‘departure date’ as ‘current date +3’.', async () => {
 
         const departureField = flightsPage.getDepartureField();
@@ -106,23 +106,23 @@ describe('Step 6', () => {
         const expectedDepartureDate = new Date().getDate() + 3;
         const expectedDepartureMonth = new Date().getMonth() + 1;
 
-        flightsPage = new FlightsPageObject();
+        flightsPage = new FlightsPage();
         const currentDepartureDate = await flightsPage.getDepartureCalendar().getAttribute('data-month');
         const currentDepartureMonth = currentDepartureDate.split('-')[1];
         if (currentDepartureMonth !== formatMonth(expectedDepartureMonth)) {
-            let backButton = flightsPage.getBackButton();
-            backButton.click();
-        }
 
+        }
+        let backButton = flightsPage.getBackButton();
+        backButton.click();
         browser.sleep(5000);
 
-        flightsPage = new FlightsPageObject();
+        flightsPage = new FlightsPage();
         const selectedDate = flightsPage.getDateElementFromCalender(expectedDepartureDate);
         selectedDate.click();
         browser.sleep(5000);
 
-        flightsPage = new FlightsPageObject();
-        const departureText = await flightsPage.getDepartureDate().getText();
+        flightsPage = new FlightsPage();
+        const departureText = await flightsPage.getDate('departure').getText();
         const departureDate = departureText.split(' ')[1];
         expect(departureDate).to.equal(`${expectedDepartureMonth}/${expectedDepartureDate}`);
         browser.sleep(5000);
@@ -130,20 +130,20 @@ describe('Step 6', () => {
 })
 
 describe('Step 7', () => {
-    flightsPage = new FlightsPageObject();
+    flightsPage = new FlightsPage();
     it('Set ‘return date’ as ‘current date +6’.', async () => {
 
         const expectedReturnDate = new Date().getDate() + 6;
         const expectedReturnMonth = new Date().getMonth() + 1;
         browser.sleep(5000);
 
-        flightsPage = new FlightsPageObject();
+        flightsPage = new FlightsPage();
         const selectedDate = flightsPage.getDateElementFromCalender(expectedReturnDate);
         selectedDate.click();
         browser.sleep(5000);
 
-        flightsPage = new FlightsPageObject();
-        const returnText = await flightsPage.getReturnDate().getText();
+        flightsPage = new FlightsPage();
+        const returnText = await flightsPage.getDate('return').getText();
         const returnDate = returnText.split(' ')[1];
         expect(returnDate).to.equal(`${expectedReturnMonth}/${expectedReturnDate}`);
     })
@@ -158,7 +158,7 @@ describe('Step 8', () => {
     const flightsResults = new FlightResultsPageObject();
 
     it('should display flights result page', async () => {
-        const isResultPagePresent = await flightsResults.getFlightsResultPage().isPresent();;
+        const isResultPagePresent = await flightsResults.getFlightsResultPage().isPresent();
         expect(isResultPagePresent).to.be.equal(true)
     })
 

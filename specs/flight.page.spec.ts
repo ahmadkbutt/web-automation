@@ -1,14 +1,19 @@
 import { browser } from "protractor";
 import { expect } from "chai";
 import { HomePageObject } from "../pages/home.page";
-import { FlightsPageObject } from "../pages/flights.page";
+// import { FlightsPageObject } from "../pages/flights.page";
+import {FlightsPage} from "../pages/flights.page";
 
-let flightsPage:FlightsPageObject; //flight page common instance
+let flightsPage:FlightsPage; //flight page common instance
 
 /*
 checks for common flight form fields presence
  */
 
+/**
+ * this function runs common form field validation for presence use-cases
+ * @param multiDateField
+ */
 const areFormFieldsPresent= (multiDateField:boolean) => {
   it("should display origin field", async () => {
     const isOriginFieldPresent = await flightsPage.isOriginFieldPresent();
@@ -21,7 +26,8 @@ const areFormFieldsPresent= (multiDateField:boolean) => {
   });
 
   it("should display dates field", async () => {
-    const isDatesFieldPresent = multiDateField ? await flightsPage.isMultiDateFieldPresent(): await flightsPage.isSingleDateFieldPresent();
+    const isDatesFieldPresent = multiDateField ? await flightsPage.isMultiDateFieldPresent()
+        : await flightsPage.isSingleDateFieldPresent();
     expect(isDatesFieldPresent).to.equal(true);
   });
 }
@@ -38,7 +44,7 @@ describe("Step 1", () => {
     expect(await browser.getCurrentUrl()).to.contains("flights");
   });
 
-  flightsPage= new FlightsPageObject();
+  flightsPage= new FlightsPage();
 
   areFormFieldsPresent(true);
 
@@ -49,7 +55,7 @@ describe("Step 1", () => {
 });
 
 describe('Step 2', () => {
-    flightsPage = new FlightsPageObject();
+    flightsPage = new FlightsPage();
     it('should switch to one-way trip',() => {
         flightsPage.getTripTypeButton().click();
         let oneWayItem = flightsPage.getTripTypeItem(0);
@@ -66,9 +72,9 @@ describe('Step 3', () => {
     multiCityItem.click();
     browser.sleep(2000);
   })
-  flightsPage = new FlightsPageObject();
+  flightsPage = new FlightsPage();
   browser.sleep(1500);
-  flightsPage = new FlightsPageObject();
+  flightsPage = new FlightsPage();
   areFormFieldsPresent(false);
   it('should display cabin field', async () => {
     const isCabinFieldPresent = await flightsPage.isCabinFieldPresent();
@@ -83,17 +89,17 @@ describe('Step 4', () => {
     roundTripItem.click();
     browser.sleep(2000);
   })
-  flightsPage = new FlightsPageObject();
+  flightsPage = new FlightsPage();
   areFormFieldsPresent(true);
 })
 
 describe('Step 5', () => {
-  flightsPage = new FlightsPageObject();
+  flightsPage = new FlightsPage();
   it('should open travellers modal',() => {
     flightsPage.getTravellersDropDownButton().click();
     browser.sleep(2000);
   })
-  flightsPage = new FlightsPageObject();
+  flightsPage = new FlightsPage();
   it('should display "Searches cannot have more than 9 adults" error message ', async () => {
     const adultTravelers = flightsPage.getTravellerOptionButton(0 , 'increment');
     for(let i = 0 ; i<10 ; i++){
