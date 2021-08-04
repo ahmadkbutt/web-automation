@@ -1,9 +1,9 @@
-import {browser} from "protractor";
+import {browser, element} from "protractor";
 import {expect} from "chai";
 import {HomePageObject} from "../pages/home.page";
 import {FlightsPageObject} from "../pages/flights.page";
-import {FlightResultsPageObject} from "./flight-results.page.spec";
-import {convertDollarToInt, formatMonth} from "../helper/helper";
+import {FlightResultsPageObject} from "../pages/flight-results.page";
+import {convertDollarToInt, formatMonth, getShortestTime} from "../helper/helper";
 
 let flightsPage: FlightsPageObject;
 
@@ -157,6 +157,31 @@ describe('Step 8', () => {
     })
     const flightsResults = new FlightResultsPageObject();
 
+    it('should display flights result page', async () => {
+        const isResultPagePresent = await flightsResults.getFlightsResultPage().isPresent();;
+        expect(isResultPagePresent).to.be.equal(true)
+    })
+
+    it('should display correct results in search form', async () => {
+        const searchedOrigin = await flightsResults.getSearchedOrigin().getText();
+        const searchedDestination = await flightsResults.getSearchedDestination().getText();
+        const searchedDepartureDate = await flightsResults.getSearchedDepartureDate().getText();
+        const searchedReturnDate = await flightsResults.getSearchedReturnDate().getText();
+        const expectedDepartureDate = new Date().getDate() + 3;
+        const expectedDepartureMonth = new Date().getMonth() + 1;
+        const departureDate = searchedDepartureDate.split(' ')[1];
+        const expectedReturnDate = new Date().getDate() + 6;
+        const expectedReturnMonth = new Date().getMonth() + 1;
+        const returnDate = searchedReturnDate.split(' ')[1];
+
+        expect(departureDate).to.equal(`${expectedDepartureMonth}/${expectedDepartureDate}`);
+        expect(returnDate).to.equal(`${expectedReturnMonth}/${expectedReturnDate}`);
+
+        expect(searchedOrigin).to.be.equal('Paris (PAR)');
+        expect(searchedDestination).to.equal('New York, NY (NYC)');
+
+    })
+
     it('should display least price in cheapest', async () => {
         const cheapestPrice = await flightsResults.getPrice('price').getText();
         const bestPrice = await flightsResults.getPrice('bestflight').getText();
@@ -164,4 +189,15 @@ describe('Step 8', () => {
         expect(convertDollarToInt(cheapestPrice)).to.be.lessThan(convertDollarToInt(bestPrice));
         expect(convertDollarToInt(cheapestPrice)).to.be.lessThan(convertDollarToInt(quickestPrice));
     })
+
+
+
+    it('should display least price in cheapest', async () => {
+        const cheapestTime = await flightsResults.getTime('price').getText();
+        const bestTime = await flightsResults.getTime('bestflight').getText();
+        const quickestTime = await flightsResults.getTime('duration').getText();
+        expect(getShortestTime(quickestTime, cheapestTime)).to.be.equal(true);
+        expect(getShortestTime(quickestTime, bestTime)).to.be.equal(true);
+    })
+
 })
