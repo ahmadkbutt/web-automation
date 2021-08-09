@@ -1,0 +1,19 @@
+{
+  "Scenario 1": {
+    "Origin Input": "PAR",
+    "Origin Selection": "Paris (PAR)",
+    "Destination Input": "NYC",
+    "Destination Selection": "New York, NY (NYC)",
+    "Passengers": {
+      "Adults": 4,
+      "Students": 0,
+      "Seniors": 0,
+      "Youth": 0,
+      "Child": 2,
+      "Seat Infant": 0,
+      "Lap Infant": 0
+    },
+    "Departure": "07/10/2021",
+    "Arrival": "11/11/2021"
+  }
+}

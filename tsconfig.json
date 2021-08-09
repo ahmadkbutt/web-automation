@@ -8,7 +8,9 @@
     "noImplicitAny": false,
     "outDir": "tmp",
     "types": ["mocha", "node", "chai"],
-    "typeRoots": ["../node_modules/@types"]
+    "typeRoots": ["../node_modules/@types"],
+    "resolveJsonModule": true,
+    "esModuleInterop": true
   },
   "exclude": ["node_modules"]
 }

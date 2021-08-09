@@ -36,10 +36,10 @@ export class FlightsearchClass{
         return this.getSearchFormBody().$$(this.searchForm.multiDate).get(0).$$('div.cQtq-input').get(divIndex).$('span.cQtq-value');
     }
     getDepartureField(): ElementFinder{
-        return $(this.searchForm.multiDate).$$('div.cQtq-input').get(0);
+        return $$(this.searchForm.multiDate).get(0).$$('div.cQtq-input').get(0);
     }
     getSearchButton(): ElementFinder{
-        return $(this.searchForm.submit).$('button');
+        return $$(this.searchForm.submit).get(0).$('button');
     }
 
     /**
@@ -54,7 +54,7 @@ export class FlightsearchClass{
     }
 
     isMultiDateFieldPresent() : promise.Promise<boolean>{
-        return $(this.searchForm.multiDate).isPresent();
+        return $$(this.searchForm.multiDate).get(0).isPresent();
     }
 
     isSingleDateFieldPresent() : promise.Promise<boolean>{

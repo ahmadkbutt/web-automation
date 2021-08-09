@@ -11,9 +11,9 @@ export let config: Config = {
   mochaOpts: {
     // Some reasonable mocha config
     reporter: "spec",
-    slow: 3000,
+    slow: 1000,
     ui: "bdd",
-    timeout: 30000,
+    timeout: 360000,
   },
   beforeLaunch: function () {
     // If you're using type script then you need compiler options

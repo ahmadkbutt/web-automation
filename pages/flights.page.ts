@@ -1,6 +1,7 @@
 import {$, $$, ElementArrayFinder, ElementFinder} from "protractor";
 import {FlightsearchClass} from "../common/flightsearch.class";
 import {FlightForm, TripForm} from "../interfaces/flightpage.interface";
+import {getMonthName} from "../helper/helper";
 
 export class FlightsPage extends FlightsearchClass {
     private flightForm: FlightForm;
@@ -33,10 +34,8 @@ export class FlightsPage extends FlightsearchClass {
                         child: "div[role='tab']"
                     },
                     controls: {
-                        back: {
-                            parent: 'div.Fj7W',
-                            child: "div[role='button']"
-                        }
+                        parent: 'div.Fj7W',
+                        child: "div[role='button']",
                     },
                     month: {
                         wrapper: 'div.ATGJ-monthWrapper',
@@ -127,10 +126,10 @@ export class FlightsPage extends FlightsearchClass {
         return this.getFlightFormModalContainer().$(wrapper.parent).$(wrapper.child);
     }
 
-    getBackButton() : ElementFinder{
+    getControlButton(type) : ElementFinder{
         const {wrapper, controls} = this.flightForm.modal.calendar;
-        const {back} = controls;
-        return this.getFlightFormModalContainer().$(wrapper.parent).$(back.parent).$$(back.child).get(0);
+        return this.getFlightFormModalContainer().$(wrapper.parent).$(controls.parent).$$(controls.child)
+            .get(type === 'back' ? 0 : 1);
     }
 
     getDepartureCalendar() : ElementFinder{
@@ -138,13 +137,14 @@ export class FlightsPage extends FlightsearchClass {
         return this.getCalendarWrapper().$(departure.parent).$$(departure.child).get(0);
     }
 
-    getDateElementFromCalender(date: number) : ElementFinder{
+    getDateElementFromCalender(date:Date): ElementFinder {
         const {calendar} = this.flightForm.modal;
         const {wrapper, month} = calendar;
         const {departure, dateElement} = month;
-
-        return this.getFlightFormModalContainer().$(wrapper.parent).$$(departure.child).get(0).$(dateElement.parent)
-            .$$(dateElement.child).get(date - 1);
+        const dateSelector = `${getMonthName(date)} ${date.getDate()}, ${date.getFullYear()}`;
+        const selectedDate = this.getFlightFormModalContainer().$(wrapper.parent).$$(departure.child).get(0).$(dateElement.parent)
+            .$(`${dateElement.child}[aria-label="${dateSelector}"]`);
+        return selectedDate
     }
 
     getTripFormBody() : ElementFinder{

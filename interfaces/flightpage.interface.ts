@@ -23,10 +23,8 @@ interface FlightForm{
                 child: string
             },
             controls: {
-                back: {
-                    parent: string,
-                    child: string
-                }
+                parent: string,
+                child: string
             },
             month: {
                 wrapper: string,
